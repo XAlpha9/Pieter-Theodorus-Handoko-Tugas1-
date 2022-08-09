@@ -7,17 +7,16 @@ using UnityEngine.SceneManagement;
 public class WaveSpawn : MonoBehaviour
 {
     public GameObject Zombie;
-    int MaxZombie, MaxHuman;
+    int MaxZombie = 10, MaxHuman;
     float timeSpawn, TimeIncrement = 2f;
     public GameObject NextWave, GameOver;
-    public Text ScoreTxT, LifeTxT;
+    public Text ScoreTxT, LifeTxT, WaveTxT, RemainingTxT;
     public static bool isFinish = false, IsDead = false;
     public static int TotalZombie = 10, Wave = 1, score = 0, life = 5;
     // Start is called before the first frame update
     void Start()
     {
-        MaxZombie = TotalZombie;
-        //MaxHuman = TotalHuman;
+        Restart();
         ZombieSpawn();
     }
 
@@ -26,14 +25,18 @@ public class WaveSpawn : MonoBehaviour
     {
         ScoreTxT.text = "score: " + score;
         LifeTxT.text = "" + life;
-
+        WaveTxT.text = "Wave: " + Wave;
+        RemainingTxT.text = "" + TotalZombie;
         if (isFinish == true)
         {
+            DeleteAll();
             NextWave.SetActive(true);
         }
 
-        else if (IsDead == true || life == 0)
+        else if (IsDead == true || life <= 0)
         {
+            life = 0;
+            DeleteAll();
             GameOver.SetActive(true);
         }
 
@@ -47,20 +50,18 @@ public class WaveSpawn : MonoBehaviour
             ZombieSpawn();
         }
         
-
-
         
     }
 
     public void ZombieSpawn()
     {
-        Instantiate(Zombie, new Vector2(Random.Range(-9, 9), 7), Quaternion.identity);
+        Instantiate(Zombie, new Vector2(Random.Range(transform.position.x-8,transform.position.x+8), transform.position.y), Quaternion.identity, transform);
         if (Wave >= 10)
         {
-            Instantiate(Zombie, new Vector2(Random.Range(-9, 9), 7), Quaternion.identity);
+            Instantiate(Zombie, new Vector2(Random.Range(transform.position.x - 8, transform.position.x + 8), transform.position.y), Quaternion.identity, transform);
             if (Wave >= 20)
             {
-                Instantiate(Zombie, new Vector2(Random.Range(-9, 9), 7), Quaternion.identity);
+                Instantiate(Zombie, new Vector2(Random.Range(transform.position.x - 8, transform.position.x + 8), transform.position.y), Quaternion.identity, transform);
             }
         }
 
@@ -69,10 +70,8 @@ public class WaveSpawn : MonoBehaviour
 
     public void WaveIncrement()
     {
+        MaxZombie += 2;
         TotalZombie = MaxZombie;
-        TotalZombie = TotalZombie + 2;
-        //TotalHuman = MaxHuman;
-        //TotalHuman = TotalHuman + 1;
         Wave = Wave + 1;
         if (TimeIncrement >= 0.2)
         {
@@ -82,18 +81,12 @@ public class WaveSpawn : MonoBehaviour
         {
             TapTapZombie.Spd = TapTapZombie.Spd - 0.1f;
         }
-        Debug.Log("Zombie SPD: " + TapTapZombie.Spd);
-        Debug.Log("Wave " + Wave);
-        Debug.Log("Total Zombie: " + TotalZombie);
-        Debug.Log("Time Spawn: " + TimeIncrement);
         isFinish = false;
         NextWave.SetActive(false);
-        Start();
     }
 
     public void Restart()
     {
-        
         GameOver.SetActive(false);
         TotalZombie = 10;
         life = 5;
@@ -101,7 +94,13 @@ public class WaveSpawn : MonoBehaviour
         Wave = 1;
         IsDead = false;
         isFinish = false;
-        SceneManager.LoadScene("Main");
-        //Application.LoadLevel(Application.loadedLevel);
+    }
+
+    public void DeleteAll()
+    {
+        foreach(Transform Child in transform)
+        {
+            GameObject.Destroy(Child.gameObject);
+        }
     }
 }

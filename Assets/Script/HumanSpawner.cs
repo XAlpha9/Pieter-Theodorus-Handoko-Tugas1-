@@ -16,18 +16,21 @@ public class HumanSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (HumanTime > 0)
+        if(WaveSpawn.isFinish == false)
         {
-            HumanTime = HumanTime - Time.deltaTime;
-        }
-        else if (HumanTime <= 0)
-        {
-            HumanSpawn();
+            if (HumanTime > 0)
+            {
+                HumanTime = HumanTime - Time.deltaTime;
+            }
+            else if (HumanTime <= 0)
+            {
+                HumanSpawn();
+            }
         }
     }
     public void HumanSpawn()
     {
-        Instantiate(Human, new Vector2(Random.Range(-9, 9), 13f), Quaternion.identity);
+        Instantiate(Human, new Vector2(Random.Range(transform.position.x - 8, transform.position.x + 8), transform.position.y+6), Quaternion.identity, transform);
         HumanTime = Random.Range(3f, 6f);
     }
 }

@@ -25,7 +25,7 @@ public class TapTapZombie : MonoBehaviour
     {
         WaveSpawn.TotalZombie = WaveSpawn.TotalZombie - 1;
         Destroy(this.gameObject);
-        WaveSpawn.score = WaveSpawn.score + 10;
+        WaveSpawn.score = WaveSpawn.score + 1;
         if (WaveSpawn.TotalZombie <= 0)
         {
             WaveSpawn.isFinish = true;

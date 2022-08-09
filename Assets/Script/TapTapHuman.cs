@@ -10,7 +10,7 @@ public class TapTapHuman : MonoBehaviour
     void Start()
     {
         Vspeed.x = 0;
-        Vspeed.y = -1f + TapTapZombie.Spd;
+        Vspeed.y = -1.05f + TapTapZombie.Spd;
         rig = GetComponent<Rigidbody2D>();
         rig.velocity = Vspeed;
     }
@@ -29,6 +29,6 @@ public class TapTapHuman : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Destroy(this.gameObject);
-        WaveSpawn.score = WaveSpawn.score + 50;
+        WaveSpawn.score = WaveSpawn.score + 5;
     }
 }
