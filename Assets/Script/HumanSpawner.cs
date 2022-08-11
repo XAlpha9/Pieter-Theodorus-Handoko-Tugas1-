@@ -2,35 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HumanSpawner : MonoBehaviour
+public class HumanSpawner : WaveSpawn
 {
-    public GameObject Human;
+    private GameObject Human;
     float HumanTime;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+        Human = GameObject.Find("Human");
         HumanTime = Random.Range(3f, 6f);
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        if(WaveSpawn.isFinish == false)
+        if(game.isFinish == false)
         {
             if (HumanTime > 0)
             {
                 HumanTime = HumanTime - Time.deltaTime;
             }
+
             else if (HumanTime <= 0)
             {
-                HumanSpawn();
+                Spawn();
             }
         }
     }
-    public void HumanSpawn()
+    protected override void Spawn()
     {
         Instantiate(Human, new Vector2(Random.Range(transform.position.x - 8, transform.position.x + 8), transform.position.y+6), Quaternion.identity, transform);
         HumanTime = Random.Range(3f, 6f);
     }
+
+    
 }

@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TapTapHuman : MonoBehaviour
+public class TapTapHuman : OrganicObject
 {
-    private Vector2 Vspeed;
-    private Rigidbody2D rig;
-    // Start is called before the first frame update
-    void Start()
+    private float spd = -1.05f;
+    protected override void Move()
     {
-        Vspeed.x = 0;
-        Vspeed.y = -1.05f + TapTapZombie.Spd;
-        rig = GetComponent<Rigidbody2D>();
-        rig.velocity = Vspeed;
+        Vector2 VSpeed;
+        VSpeed = new Vector2(game.SPDx, game.SPD + spd);
+        Rigidbody2D Rig = GetComponent<Rigidbody2D>();
+        Rig.velocity = VSpeed;
     }
 
     // Update is called once per frame
@@ -21,14 +19,16 @@ public class TapTapHuman : MonoBehaviour
         
     }
 
-    void OnMouseDown()
+    public override void OnTap()
     {
+        game.IsDead = true;
         Destroy(this.gameObject);
-        WaveSpawn.IsDead = true;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        game.score = game.score + 5;
         Destroy(this.gameObject);
-        WaveSpawn.score = WaveSpawn.score + 5;
     }
+
+
 }
